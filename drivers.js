@@ -20,7 +20,7 @@ const drivers = {
     "Menno van der Zwart": {
         league: Leagues.Beginner
     },
-    "Kevin Rutte": {
+    "Kevin Rutten": {
         league: Leagues.Beginner
     },
     "Christian Boer": {
