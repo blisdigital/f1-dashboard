@@ -56,7 +56,7 @@ results["australia"] = [{
 }, {
     driver: "Benjamin Dudok",
     simulator: Simulators.BlisLefty,
-    time: "",
+    time: "1:30.197",
     tyre: TyreCompounds.Soft,
 }, {
     driver: "Pelle Overbeeke",
@@ -75,7 +75,7 @@ results["australia"] = [{
     tyre: TyreCompounds.Soft,
 }, {
     driver: "Richard Schot",
-    simulator: Simulators.BlisLefty,
-    time: "",
+    simulator: Simulators.TheRightOne,
+    time: "1:28.002",
     tyre: TyreCompounds.Soft,
 }];
