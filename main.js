@@ -157,7 +157,6 @@ function loadResults(results) {
             results.push({
                 driver: driverName,
                 simulator: "",
-                tyre: TyreCompounds.Soft,
                 points: 0
             });
         }
@@ -224,10 +223,13 @@ function loadResults(results) {
         // Compound
         col = document.createElement("td");
         col.classList.add("results__tyre");
-        const tyre = document.createElement("span");
-        tyre.classList.add("tyre", "tyre--" + result.tyre);
-        tyre.title = result.tyre;
-        col.append(tyre);
+        if (!!result.tyre) {
+            const tyre = document.createElement("span");
+            tyre.classList.add("tyre", "tyre--" + result.tyre);
+            tyre.title = result.tyre;
+            col.append(tyre);
+        }
+
         row.append(col);
 
         // Punten
