@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BLIS F1 Challenge</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preload" as="font" href="fonts/Formula1-Regular.woff2" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" as="font" href="fonts/Formula1-Italic.woff2" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" as="font" href="fonts/Formula1-Bold.woff2" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" as="font" href="fonts/Formula1-Black.woff2" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" as="font" href="fonts/Formula1-Wide.woff2" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" as="font" href="fonts/F1YEARRegular.woff2" type="font/woff2" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="fonts/fonts.css" type="text/css" />
+    <link rel="stylesheet" href="main.css" type="text/css" />
+</head>
+<body>
+    <div class="page">
+        <header class="page__header">
+            <h1 class="page__title">
+                <img src="img/f1_logo.svg" alt="F1" class="page__f1-logo" />
+                <img src="img/blis_logo.svg" alt="BLIS.digital" class="page__blis-logo" />
+                <span class="page__title-caption">BLIS F1 Challenge</span>
+            </h1>
+        </header>
+        <main class="page__content">
+            <div class="results">
+                <div class="results__nav-container">
+                    <ul class="results__nav" id="results-nav"></ul>
+                </div>
+                <div class="results__content" id="results-container">
+                    <table class="results__table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>League</th>
+                                <th>Naam</th>
+                                <th>Rondetijd</th>
+                                <th>Delta</th>
+                                <th>Simulator</th>
+                                <th>Compound</th>
+                                <th>Punten</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+        <footer class="page__footer">
+
+        </footer>
+    </div>
+
+    <script src="enums.js"></script>
+    <script src="points.js"></script>
+    <script src="leagues.js"></script>
+    <script src="drivers.js"></script>
+    <script src="races.js"></script>
+
+    <!-- Race results -->
+    <script>const results = {};</script>
+    <script src="results/1-australia.js"></script>
+    <!-- -->
+
+    <script src="main.js"></script>
+</body>
+</html>

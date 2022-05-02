@@ -1,0 +1,180 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 13.333px;
+}
+
+body * {
+    box-sizing: border-box;
+}
+
+.page {
+
+}
+
+.page__title {
+    font-family: F1BoldRegular, Helvetica, sans-serif;
+    padding: 32px;
+}
+
+.page__blis-logo {
+    height: 32px;
+    margin: 0 16px 16px 8px;
+}
+
+.page__f1-logo {
+    height: 32px;
+    margin: 0 8px 16px 0;
+}
+
+.page__title-caption {
+    display: block;
+}
+
+.page__content {
+    background-color: #242424;
+    padding: 32px;
+}
+
+.results {
+
+}
+
+.results__nav {
+    list-style: none;
+    margin: 0 0 -1px 0;
+    padding: 0;
+    font-family: F1BoldRegular, Helvetica, sans-serif;
+    font-weight: 700;
+}
+
+.results__nav-item {
+    display: inline-block;
+    background-color: #323232;
+    border: 1px solid #323232;
+    margin-right: 1px;
+    vertical-align: bottom;
+}
+
+.results__nav-item--active {
+    background-color: #242424;
+    border-bottom-color: #242424;
+}
+
+.results__nav-item a {
+    color: #aaaaaa;
+    display: inline-block;
+    padding: 16px 24px;
+    text-decoration: none;
+}
+.results__nav-item:hover {
+    background-color: #242424;
+}
+
+.results__nav-item--active a {
+    color: #ffffff;
+    line-height: 24px;
+}
+
+.results__content {
+    border: 1px solid #323232;
+    padding: 16px 0;
+}
+
+.results__table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    color: #ffffff;
+    width: 100%;
+}
+
+.results__table thead,
+.results__table tbody {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+
+.results__table thead th,
+.results__table tbody td {
+    border: 0;
+    color: #ffffff;
+    font-family: "Titillium Web", Helvetica, sans-serif;
+    font-weight: 700;
+    line-height: 32px;
+    margin: 0;
+    padding: 0 7px;
+    text-align: left;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+.results__table thead th:first-child,
+.results__table tbody td:first-child {
+    padding-left: 24px;
+}
+
+.results__table thead th {
+    color: #737373;
+    font-family: "Titillium Web", Helvetica, sans-serif;
+}
+
+.results__table tbody tr {
+    border-bottom: 2px solid transparent;
+    height: 32px;
+    transition: border 0.2s ease 0s;
+    white-space: nowrap;
+}
+
+.results__table tbody tr:nth-child(odd) {
+    background-color: #323232;
+}
+
+.results__table tbody td {
+    font-family: F1BoldRegular, Helvetica, sans-serif;
+}
+.results__table tbody td:first-child {
+    width: 64px;
+}
+
+.results__table .results__time--fastest {
+    color: #ff00ff;
+}
+
+.results__table .results__row--no-time td {
+    color: #737373;
+}
+
+.results__table .results__row--gold td {
+    color: gold;
+}
+
+.results__table .results__row--silver td {
+    color: silver;
+}
+
+.results__table .results__row--bronze td {
+    color: #cd7f32;
+}
+
+.results__table .results__row--winner-drinking-challenge td {
+    color: #4793f9 !important;
+}
+
+.tyre {
+    background-size: contain;
+    display: inline-block;
+    height: 24px;
+    vertical-align: middle;
+    width: 24px;
+}
+
+.tyre--soft {
+    background-image: url('img/tyre-soft.png');
+}
+.tyre--medium {
+    background-image: url('img/tyre-medium.png');
+}
+.tyre--hard {
+    background-image: url('img/tyre-hard.png');
+}

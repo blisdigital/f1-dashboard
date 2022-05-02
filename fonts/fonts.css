@@ -1,0 +1,27 @@
+@font-face {
+    font-family: 'F1BoldRegular';
+    src: url('Formula1-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'F1BoldRegular';
+    src: url('Formula1-Regular.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'F1Wide';
+    src: url('Formula1-Wide.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'F1Black';
+    src: url('Formula1-Black.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
