@@ -79,6 +79,10 @@ function orderResults(results) {
     results = results.slice();
 
     for (const result of results) {
+        if (result.time === "DNS" || result.time === "DNF") {
+             continue;
+        }
+
         result.timeInSeconds = toSeconds(result.time);
     }
 
@@ -145,8 +149,23 @@ function loadResults(results) {
 
     const tbody = document.createElement("tbody");
 
+    for (const driverName in drivers) {
+        const driver = drivers[driverName];
+        
+        const result = results.filter(function(r) { return r.driver === driverName })[0];
+        if (!result) {
+            results.push({
+                driver: driverName,
+                simulator: "",
+                tyre: TyreCompounds.Soft,
+                points: 0
+            });
+        }
+    }
+
     const orderedResults = orderResults(results);
     let totalDeltaInSeconds = 0;
+
     for (const result of orderedResults) {
         const driver = drivers[result.driver];
 
@@ -176,7 +195,7 @@ function loadResults(results) {
         // Rondetijd
         col = document.createElement("td");
         col.classList.add("results__time");
-        col.innerText = !!result.timeInSeconds ? result.time : "DNS";
+        col.innerText = !!result.time ? result.time : (result.time === "DNS" ? "DNS" : "NTB");
         if (orderedResults.fastestInLeague[driver.league.name] && orderedResults.fastestInLeague[driver.league.name] === result) {
             col.classList.add("results__time--fastest");
         }
