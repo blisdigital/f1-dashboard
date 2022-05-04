@@ -181,7 +181,7 @@ function loadResults(results) {
 
         // League
         col = document.createElement("td");
-        col.classList.add("results__league");
+        col.classList.add("results__league", "results__league--" + driver.league.name);
         col.innerText = driver.league.title;
         row.append(col);
 
@@ -318,7 +318,7 @@ function loadClassification(results) {
         
         // League
         col = document.createElement("td");
-        col.classList.add("results__league");
+        col.classList.add("results__league", "results__league--" + driver.league.name);
         col.innerText = driver.league.title;
         row.append(col);
         
