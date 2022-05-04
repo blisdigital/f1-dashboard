@@ -161,6 +161,30 @@ body * {
     color: #4793f9 !important;
 }
 
+.results__table td.results__league--first-timer {
+    color: #55aaff;
+}
+
+.results__table td.results__league--beginner {
+    color: #99ee66;
+}
+
+.results__table td.results__league--amateur {
+    color: #f1d756;
+}
+
+.results__table td.results__league--experienced {
+    color: #ff9f4c;
+}
+
+.results__table td.results__league--professional {
+    color: #ff7777;
+}
+
+.results__table td.results__league--elite {
+    color: #a50000;
+}
+
 .tyre {
     background-size: contain;
     display: inline-block;
