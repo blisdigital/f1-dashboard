@@ -8,7 +8,7 @@ const drivers = {
     "Ton van Tilburg": {
         league: Leagues.FirstTimer
     },
-    "Eric Kruithof": {
+    "Erik Kruithof": {
         league: Leagues.FirstTimer
     },
     "Peter Hogenbirk": {

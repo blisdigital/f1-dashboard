@@ -14,7 +14,7 @@ results["australia"] = [{
     time: "1:27.946",
     tyre: TyreCompounds.Soft,
 }, {
-    driver: "Eric Kruithof",
+    driver: "Erik Kruithof",
     simulator: Simulators.TheRightOne,
     time: "1:28.507",
     tyre: TyreCompounds.Soft,
