@@ -41,7 +41,7 @@ results["imola"] = [{
 }, {
     driver: "Christian Boer",
     simulator: Simulators.BlisLefty,
-    time: "DNS",
+    time: "1:20.318",
     tyre: TyreCompounds.Soft,
 }, {
     driver: "Jasper Hopstaken",
@@ -66,7 +66,7 @@ results["imola"] = [{
 }, {
     driver: "Cees Schrijen",
     simulator: Simulators.TheRightOne,
-    time: "DNS",
+    time: "1:20.099",
     tyre: TyreCompounds.Soft,
 }, {
     driver: "Dirk-Jan Los",
@@ -76,6 +76,6 @@ results["imola"] = [{
 }, {
     driver: "Richard Schot",
     simulator: Simulators.TheRightOne,
-    time: "DNS",
+    time: "1:19.793",
     tyre: TyreCompounds.Soft,
 }];
