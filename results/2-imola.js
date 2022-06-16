@@ -44,11 +44,6 @@ results["imola"] = [{
     time: "1:20.318",
     tyre: TyreCompounds.Soft,
 }, {
-    driver: "Jasper Hopstaken",
-    simulator: Simulators.TheRightOne,
-    time: "DNS",
-    tyre: TyreCompounds.Soft,
-}, {
     driver: "Richard Dekker",
     simulator: Simulators.BlisLefty,
     time: "1:21.272",

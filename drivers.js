@@ -26,9 +26,6 @@ const drivers = {
     "Christian Boer": {
         league: Leagues.Amateur
     },
-    "Jasper Hopstaken": {
-        league: Leagues.Amateur
-    },
     "Richard Dekker": {
         league: Leagues.Amateur
     },
