@@ -29,98 +29,41 @@ function detectUrlHash() {
     }
 }
 
-function toSeconds(timeStr) {
-    if (!timeStr) {
-        return 0;
+function calculateResults(results) {
+    for (const result of results) {
+        result.time = new TimeResult(result.time);
     }
 
-    const hmsParts = timeStr.split(":");
-    let hours = 0;
-    let minutes = 0;
-    let seconds = 0.0;
-
-    if (hmsParts.length === 0) {
-        seconds = parseFloat(timeStr);
-        secMsStr = timeStr;
-    } else if (hmsParts.length === 1) {
-        seconds = parseFloat(hmsParts[0]);
-        secMsStr = hmsParts[0];
-    } else if (hmsParts.length === 2) {
-        minutes = parseInt(hmsParts[0]);
-        seconds = parseFloat(hmsParts[1]);
-    } else if (hmsParts.length === 3) {
-        hours = parseInt(hmsParts[0]);
-        minutes = parseInt(hmsParts[1]);
-        seconds = parseFloat(hmsParts[2]);
-    }
-
-    return (hours * 60 * 60) + (minutes * 60) + seconds;
-}
-
-function formatTime(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    seconds = seconds % 60;
-
-    let result = "";
-    if (!!hours) {
-        result += (hours < 10 ? "0" + hours : hours) + ":";
-    }
-
-    if (!!hours || !!minutes) {
-        result += (minutes < 10 ? "0" + minutes : minutes) + ":";
-    }
-
-    result += (!!hours || !!minutes) && seconds < 10 ? "0" + seconds.toFixed(3) : seconds.toFixed(3);
-    return result;
+    return results;
 }
 
 function orderResults(results) {
     results = results.slice();
 
-    for (const result of results) {
-        if (result.time === "DNS" || result.time === "DNF") {
-             continue;
-        }
-
-        result.timeInSeconds = toSeconds(result.time);
-    }
-
     results.sort(function(a, b) {
-        if (!a.timeInSeconds && !b.timeInSeconds) {
+        if (!a.time.totalSeconds && !b.time.totalSeconds) {
             return 0;
-        } else if (!!a.timeInSeconds && !b.timeInSeconds) {
+        } else if (!!a.time.totalSeconds && !b.time.totalSeconds) {
             return -1;
-        } else if (!a.timeInSeconds && !!b.timeInSeconds) {
+        } else if (!a.time.totalSeconds && !!b.time.totalSeconds) {
             return 1;
         }
 
-        return a.timeInSeconds < b.timeInSeconds ? -1 : 1;
+        return a.time.totalSeconds < b.time.totalSeconds ? -1 : 1;
     });
 
-    let prevTimeInSeconds = 0;
     results.fastestInLeague = [];
     for (let i = 0; i < results.length; i++) {
         const result = results[i];
-        result.position = i + 1;
-        
         const driver = drivers[result.driver];
 
-        if (!!prevTimeInSeconds) {
-            result.deltaInSeconds = result.timeInSeconds - prevTimeInSeconds;
-        } else {
-            result.deltaInSeconds = 0;
-        }
+        result.points = !!result.time.hasTimeSet ? points[i] || 0 : 0;
 
-        if (!!result.timeInSeconds
+        if (!!result.time.hasTimeSet
             && (!results.fastestInLeague.hasOwnProperty(driver.league.name)
-                || result.timeInSeconds < results.fastestInLeague[driver.league.name].timeInSeconds)) {
-                    results.fastestInLeague[driver.league.name] = result;
+                || result.time.totalSeconds < results.fastestInLeague[driver.league.name].time.totalSeconds)) {
+            results.fastestInLeague[driver.league.name] = result;
         }
-
-        result.points = !!result.timeInSeconds ? points[i] || 0 : 0;
-
-        prevTimeInSeconds = result.timeInSeconds;
     }
 
     return results;
@@ -162,21 +105,25 @@ function loadResults(results) {
         }
     }
 
+    calculateResults(results);
+
     const orderedResults = orderResults(results);
     let totalDeltaInSeconds = 0;
 
+    let position = 1;
+    let prevResult;
     for (const result of orderedResults) {
         const driver = drivers[result.driver];
 
         const row = document.createElement("tr");
-        if (!result.timeInSeconds) {
+        if (!result.time.hasTimeSet) {
             row.classList.add("results__row--no-time");
         }
         
         // #
         let col = document.createElement("td");
         col.classList.add("results__pos");
-        col.innerHTML = result.position;
+        col.innerHTML = position;
         row.append(col);
 
         // League
@@ -194,7 +141,7 @@ function loadResults(results) {
         // Rondetijd
         col = document.createElement("td");
         col.classList.add("results__time");
-        col.innerText = !!result.time ? result.time : (result.time === "DNS" ? "DNS" : "NTB");
+        col.innerText = result.time.toString();
         if (orderedResults.fastestInLeague[driver.league.name] && orderedResults.fastestInLeague[driver.league.name] === result) {
             col.classList.add("results__time--fastest");
         }
@@ -202,16 +149,17 @@ function loadResults(results) {
         row.append(col);
 
         // Delta
+        const delta = prevResult && result.time.hasTimeSet ? result.time.getDeltaInSeconds(prevResult.time) : 0;
+        totalDeltaInSeconds += delta;
         col = document.createElement("td");
         col.classList.add("results__delta");
-        col.innerText = !!result.deltaInSeconds && !!result.timeInSeconds ? "+" + formatTime(result.deltaInSeconds) : '';
-        totalDeltaInSeconds += result.deltaInSeconds;
+        col.innerText = !!delta ? TimeResult.formatDelta(delta) : '';
         row.append(col);
 
         // Totale delta
         col = document.createElement("td");
         col.classList.add("results__total-delta");
-        col.innerText = !!totalDeltaInSeconds && !!result.timeInSeconds ? "+" + formatTime(totalDeltaInSeconds) : "";
+        col.innerText = !!totalDeltaInSeconds && result.time.hasTimeSet ? "+" + TimeResult.formatTime(totalDeltaInSeconds) : "";
         row.append(col);
 
         // Simulator
@@ -239,6 +187,9 @@ function loadResults(results) {
         row.append(col);
 
         tbody.append(row);
+
+        position++;
+        prevResult = result;
     }
 
     table.append(tbody);
@@ -267,8 +218,10 @@ function loadClassification(results) {
 
     const tbody = document.createElement("tbody");
 
-    const driverTotals = [];
+    const driverTotals = {};
     for (const round in results) {
+        calculateResults(results[round]);
+
         const orderedResults = orderResults(results[round]);
         for (const result of orderedResults) {
             const driver = drivers[result.driver];
@@ -277,26 +230,37 @@ function loadClassification(results) {
                 driverTotals[result.driver] = {
                     driver: result.driver,
                     league: driver.league,
-                    totalTimeInSeconds: result.timeInSeconds,
-                    totalPoints: result.points
+                    totalTime: !driver.disqualified ? new TimeResult(result.time) : 0,
+                    totalPoints: !driver.disqualified ? result.points : 0
                 };
-            } else {
-                driverTotals[result.driver].totalTimeInSeconds += result.timeInSeconds;
+            } else if (!driver.disqualified) {
+                driverTotals[result.driver].totalTime = TimeResult.append(driverTotals[result.driver].totalTime, result.time);
                 driverTotals[result.driver].totalPoints += result.points;
             }
         }
     }
 
-    driverTotals.sort(function(a, b) {
-        return a.totalPoints - b.totalPoints;
+    
+    const sortedDriverTotals = Object.values(driverTotals).sort(function(a, b) {
+        if (a.totalPoints > b.totalPoints) {
+            return -1;
+        } else if (a.totalPoints < b.totalPoints) {
+            return 1;
+        } else if (a.totalPoints == b.totalPoints) {
+            return 0;
+        }
     });
 
     let position = 1;
-    let prevTotalTimeInSeconds = 0;
-    let totalDeltaInSeconds = 0;
-    for (const driverName in driverTotals) {
-        const driverClassification = driverTotals[driverName];
+    let prevTotalTime = 0;
+    let firstTotalTime = null;
+    for (const result of sortedDriverTotals) {
+        const driverClassification = driverTotals[result.driver];
         const driver = drivers[driverClassification.driver];
+
+        if (firstTotalTime === null) {
+            firstTotalTime = driverClassification.totalTime;
+        }
         
         const row = document.createElement("tr");
         row.classList.add("results__row");
@@ -331,35 +295,33 @@ function loadClassification(results) {
         // Totale rondetijd
         col = document.createElement("td");
         col.classList.add("results__time");
-        col.innerText = !!driverClassification.totalTimeInSeconds ? formatTime(driverClassification.totalTimeInSeconds) : "";
+        col.innerText = !!driver.disqualified ? "DSQ" : (!!driverClassification.totalTime.totalSeconds ? TimeResult.formatTime(driverClassification.totalTime.totalSeconds) : "");
         row.append(col);
 
         // Delta
+        const delta = !!prevTotalTime && !!driverClassification.totalTime.totalSeconds ? driverClassification.totalTime.getDeltaInSeconds(prevTotalTime) : 0;
         col = document.createElement("td");
         col.classList.add("results__delta");
-        const deltaInSeconds =  !!prevTotalTimeInSeconds && !!driverClassification.totalTimeInSeconds ? driverClassification.totalTimeInSeconds - prevTotalTimeInSeconds : 0;
-        totalDeltaInSeconds += deltaInSeconds;
-        col.innerText = !!prevTotalTimeInSeconds && !!driverClassification.totalTimeInSeconds
-            ? "+" + formatTime(deltaInSeconds)
-            : "";
+        col.innerText = !!delta ? TimeResult.formatDelta(delta) : "";
         row.append(col);
 
         // Totale delta
+        const totalDelta = !!firstTotalTime && driverClassification.totalTime.totalSeconds ? driverClassification.totalTime.getDeltaInSeconds(firstTotalTime) : 0;
         col = document.createElement("td");
         col.classList.add("results__total-delta");
-        col.innerText = !!totalDeltaInSeconds && !!driverClassification.totalTimeInSeconds ? "+" + formatTime(totalDeltaInSeconds) : "";
+        col.innerText = !!totalDelta ? TimeResult.formatDelta(totalDelta) : "";
         row.append(col);
 
         // Totale punten
         col = document.createElement("td");
         col.classList.add("results__total-points");
-        col.innerText = driverClassification.totalPoints;
+        col.innerText = !!driver.disqualified ? "DSQ" : driverClassification.totalPoints;
         row.append(col);
 
         tbody.append(row);
 
         position++;
-        prevTotalTimeInSeconds = driverClassification.totalTimeInSeconds;
+        prevTotalTime = driverClassification.totalTimeInSeconds;
     }
 
     table.append(tbody);
